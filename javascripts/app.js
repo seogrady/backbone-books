@@ -4,7 +4,7 @@ $(function(){
     defaults: {
       title: null,
       author: null,
-      date: new Date(),
+      date: null,
       isbn: null
     }
   });
@@ -17,10 +17,9 @@ $(function(){
   window.Books = new BooksCollection;
 
   window.BookView = Backbone.View.extend({
-    tagName: "li",
+    tagName: "tr",
 
     events: {
-      "click li .checkbox": "toggleDone"
     },
 
     template: $("#book-item").template(),
@@ -40,41 +39,82 @@ $(function(){
     el: $("#app"),
     events: {
       "click .tabs a": "tabs",
-			"click #add-book": "createBook"
+			"click #add-book": "createBook",
+			"click .edit-book": "editBook",
+			"click #update-book": "updateBook",			
+			"click .delete-book": "deleteBook"							
     },
 
     initialize: function(){
-      _.bindAll(this, "render");
+      _.bindAll(this, "render", "tabs", "addAll", "addBook", "createBook", "editBook", "deleteBook");
+			this.activeBookId = null;
+			this.$("#create").show();
+      Books.bind('add', this.addBook); 
+      Books.bind('reset', this.addAll);
+      Books.fetch();
     },
 
 		tabs: function(e){
 		  var target = $(e.target);
 		  $('.tabs a').removeClass('active');
 		  target.addClass('active');
-		  if(target.attr('id') === "create")
+		  this.$('.content').hide();
+		  if(target.attr('id') === "create-tab")
 		  {
-		    this.$("#contents").html(jQuery.tmpl($("#create-view").template(), {}));	
+		    this.$("#create").show();	
 		  }
 		  else
 		  {	
-			
+			  this.addAll();
+		    this.$("#manage").show();		
 		  }
 		},
+		
+		editBook: function(el){
+			var target = $(el.target), book = Books.get(target.data('id'));
+			this.activeBookId = target.data('id');
+			$('#book-edit-form').find(':input[name]:enabled').each(function() {
+				var self = $(this);
+				self.val(book.attributes[self.attr('name')]);
+			});
+			this.$('.content').hide();
+			this.$('#manage-edit').show();
+		},
+		
+		updateBook: function(el){
+			var target = $(el.target), data = {};
+			$('#book-edit-form').find(':input[name]:enabled').each(function() {
+				var self = $(this);
+				data[self.attr('name')] = self.val();
+			});
+			Books.get(this.activeBookId).set(data);
+			this.addAll();
+			this.$('.content').hide();
+			this.$('#manage').show();
+		},
 
-	  // addAll: function(){
-	  // 			Books.each(this.addBook)
-	  // },
-	  // 
-	  // addBook: function(book){
-	  //   var view = new BookView({model: book});
-	  //   this.$(".contents").html("jahsbdjahbsdjasdhb");
-	  // },
+		deleteBook: function(el){
+			var target = $(el.target);
+			Books.get(target.data('id')).destroy();
+			target.parents('tr').remove();
+		},		
+
+	  addAll: function(){
+		  this.$("#manage table tbody").empty();
+	    Books.each(this.addBook)
+	  },
+	  
+	  addBook: function(book){
+	    var view = new BookView({model: book});
+	    this.$("#manage table tbody").prepend(view.render().el);
+	  },
 
 	  createBook: function(e){
 			var data = {};
 			$('#book-form').find(':input[name]:enabled').each(function() {
 				var self = $(this);
 				data[self.attr('name')] = self.val();
+				self.val("");
 			});
 			Books.create(data);
 	  }

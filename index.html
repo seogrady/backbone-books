@@ -52,20 +52,56 @@
 	<!-- Primary Page Layout
 	================================================== -->
 
-	<!-- Delete everything in this .container and get started on your own site! -->
-
 	<div class="container">
 
 	    <div id="app">
 	      <header><h1>Backbone Books</h1></header>
 	
 			  <ul class="tabs">
-			    <li><a id="create" class="active" href="javascript:void(0);">Create</a></li>
-			    <li><a id="manage" href="javascript:void(0);">Manage</a></li>
+			    <li><a id="create-tab" class="active" href="javascript:void(0);">Create</a></li>
+			    <li><a id="manage-tab" href="javascript:void(0);">Manage</a></li>
 			  </ul>
 
-	      <div id="contents">
+	      <div id="create" class="content">
+		 			<form id="book-form">
+				    <input type="text" name="title" id="title-field" value="" placeholder="Enter title..."/>
+				    <input type="text" name="author" id="author-field" value="" placeholder="Enter author..."/>
+				    <input type="text" name="date" id="date-field" value="" placeholder="Enter published date..."/>
+				    <input type="text" name="isbn" id="isbn-field" value="" placeholder="Enter ISBN..."/>			
+			    </form>
+					<div class="buttons">
+			      <button id="add-book">Add book</button>
+			    </div>
 	      </div>
+	
+				<div id="manage" class="content">
+					<table>
+						<thead>
+							<tr>
+							  <th>Title</th>
+							  <th>Author</th>		
+							  <th>Published</th>
+							  <th>ISBN</th>
+							  <th></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>	
+				</div>
+				
+				<div id="manage-edit" class="content">
+		 			<form id="book-edit-form">
+				    <input type="text" name="title" id="title-field" value="" placeholder="Enter title..."/>
+				    <input type="text" name="author" id="author-field" value="" placeholder="Enter author..."/>
+				    <input type="text" name="date" id="date-field" value="" placeholder="Enter published date..."/>
+				    <input type="text" name="isbn" id="isbn-field" value="" placeholder="Enter ISBN..."/>			
+			    </form>
+					<div class="buttons">
+			      <button id="update-book">update book</button>
+			    </div>
+	      </div>
+					
 	    </div>
 
 	    <footer>
@@ -77,26 +113,14 @@
 
 	<!-- Templates -->
     <script id="book-item" type="text/template">
-      <div class="book">
-		<ul>
-		  <li>${title}</li>
-		  <li>${author}</li>
-		  <li>${date}</li>
-		  <li>${isbn}</li>				
-		</ul>
-	  </div>	
-    </script>
-
-    <script id="create-view" type="text/template">
- 			<form id="book-form">
-		    <input type="text" name="title" id="title-field" value="" placeholder="Enter title..."/>
-		    <input type="text" name="author" id="author-field" value="" placeholder="Enter author..."/>
-		    <input type="text" name="date" id="date-field" value="" placeholder="Enter date..."/>
-		    <input type="text" name="isbn" id="isbn-field" value="" placeholder="Enter ISBN..."/>			
-	    </form>
-			<div class="buttons">
-	      <button id="add-book">Add book</button>
-	    </div>
+		  <td>${title}</td>	
+		  <td>${author}</td>		
+		  <td>${date}</td>	
+		  <td>${isbn}</td>
+		  <td>
+		    <a class="edit-book" href="javascript:void(0);" data-id="${id}">edit</a>
+		    <a class="delete-book" href="javascript:void(0);" data-id="${id}">delete</a>  
+		  </td>									
     </script>
 
 

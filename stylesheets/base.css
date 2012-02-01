@@ -339,5 +339,25 @@
 	.remove-bottom { margin-bottom: 0 !important; }
 	.half-bottom { margin-bottom: 10px !important; }
 	.add-bottom { margin-bottom: 20px !important; }
+	
+	.content { display:none; }
 
+	#app { margin-top:40px; }
+
+  #manage table { 
+	  margin:20px 0;
+		border:1px solid #ccc;
+	}
+	#manage table th {
+		font-weight: bold;
+		border-bottom: 1px solid #ddd;
+		padding: 6px 15px 6px 15px;
+	}
+
+	#manage table td {
+		border-right: 1px solid #ddd;;
+		border-bottom: 1px solid #ddd;;
+		background: #fff;
+		padding: 6px 15px 6px 15px;
+	}
 
