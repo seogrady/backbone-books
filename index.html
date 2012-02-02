@@ -74,14 +74,15 @@
 			    </div>
 	      </div>
 	
-				<div id="manage" class="content">
+				<div id="manage" class="content" data-sort="author">
 					<table>
 						<thead>
 							<tr>
-							  <th>Title</th>
-							  <th>Author</th>		
-							  <th>Published</th>
-							  <th>ISBN</th>
+								<th><input id="selectall" type="checkbox" name="selectall"/></th>
+							  <th><a data-sort="title" class="sort" href="javascript:void(0);">Title</a></th>
+							  <th><a data-sort="author" class="sort" href="javascript:void(0);">Author</a></th>		
+							  <th><a data-sort="date" class="sort" href="javascript:void(0);">Published</a></th>
+							  <th><a data-sort="isbn" class="sort" href="javascript:void(0);">ISBN</a></th>
 							  <th></th>
 							</tr>
 						</thead>
@@ -113,6 +114,7 @@
 
 	<!-- Templates -->
     <script id="book-item" type="text/template">
+		  <td><input class="select" type="checkbox" name="select" data-id="${id}" /></td>
 		  <td>${title}</td>	
 		  <td>${author}</td>		
 		  <td>${date}</td>	

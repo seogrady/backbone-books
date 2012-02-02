@@ -348,6 +348,12 @@
 	  margin:20px 0;
 		border:1px solid #ccc;
 	}
+	#manage table tr {
+		display: table-row;
+		vertical-align: inherit;
+		border-color: inherit;
+		cursor:pointer;
+	}
 	#manage table th {
 		font-weight: bold;
 		border-bottom: 1px solid #ddd;
@@ -357,7 +363,7 @@
 	#manage table td {
 		border-right: 1px solid #ddd;;
 		border-bottom: 1px solid #ddd;;
-		background: #fff;
+		background: transparent;
 		padding: 6px 15px 6px 15px;
 	}
 

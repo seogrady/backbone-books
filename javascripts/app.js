@@ -12,6 +12,9 @@ $(function(){
   window.BooksCollection = Backbone.Collection.extend({
     model: Book,
     localStorage: new Store("_books"),
+	  comparator: function(book) {
+		  return -book.get(this.$('#manage').data('sort'));
+		}
   });
 
   window.Books = new BooksCollection;
@@ -42,17 +45,34 @@ $(function(){
 			"click #add-book": "createBook",
 			"click .edit-book": "editBook",
 			"click #update-book": "updateBook",			
-			"click .delete-book": "deleteBook"							
+			"click .delete-book": "deleteBook",
+			"click .sort": "sortBooks",
+			"click .select": "selectBookRow",	
+			"click #manage tbody tr": "selectBookRow" 													
     },
 
     initialize: function(){
-      _.bindAll(this, "render", "tabs", "addAll", "addBook", "createBook", "editBook", "deleteBook");
+      _.bindAll(this, "render", "tabs", "addAll", "addBook", "createBook", "editBook", "deleteBook", "sortBooks");
 			this.activeBookId = null;
 			this.$("#create").show();
       Books.bind('add', this.addBook); 
       Books.bind('reset', this.addAll);
       Books.fetch();
     },
+
+		selectBookRow: function(el){
+			var target = $(el.target), row = target.parents("tr"), checkbox = row.find('.select');
+			if(checkbox.is(':checked'))
+			{
+				row.css({background:"white"});
+				checkbox.prop("checked", false);
+			}
+			else
+			{
+				row.css({background:"whiteSmoke"});
+				checkbox.prop("checked", true);
+			}
+		},		
 
 		tabs: function(e){
 		  var target = $(e.target);
@@ -87,7 +107,7 @@ $(function(){
 				var self = $(this);
 				data[self.attr('name')] = self.val();
 			});
-			Books.get(this.activeBookId).set(data);
+			Books.get(this.activeBookId).set(data).save();
 			this.addAll();
 			this.$('.content').hide();
 			this.$('#manage').show();
@@ -100,13 +120,20 @@ $(function(){
 		},		
 
 	  addAll: function(){
-		  this.$("#manage table tbody").empty();
+		  this.$("#manage table tbody").empty(); 
 	    Books.each(this.addBook)
 	  },
 	  
 	  addBook: function(book){
 	    var view = new BookView({model: book});
 	    this.$("#manage table tbody").prepend(view.render().el);
+	  },
+	
+	  sortBooks: function(el){
+		  var target = $(el.target);
+		  $('#manage').data('sort', target.data('sort'));
+		  Books.sort();
+			this.addAll();
 	  },
 
 	  createBook: function(e){
