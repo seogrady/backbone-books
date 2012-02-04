@@ -110,11 +110,13 @@ $(function(){
 			}	
 		},
 		
-		deleteAll: function(){
+		deleteAll: function(){	
 			$('#manage tbody').find('input:checked').each(function() {
-				Books.get($(this).data('id')).destroy();
+				var that = $(this);
+				Books.get(that.data('id')).destroy();
+				that.parents('tr').remove();
 			});
-			this.$("#manage table tbody").empty();
+			$('#select-info').hide();
 			$('#selectall').prop("checked", false);
 		},
 
