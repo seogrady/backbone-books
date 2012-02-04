@@ -47,8 +47,10 @@ $(function(){
 			"click #update-book": "updateBook",			
 			"click .delete-book": "deleteBook",
 			"click .sort": "sortBooks",
+			"click #selectall": "selectAllBooks",
 			"click .select": "selectBookRow",	
-			"click #manage tbody tr": "selectBookRow" 													
+			"click #manage tbody tr": "selectBookRow",
+			"click #deleteall": "deleteAll"													
     },
 
     initialize: function(){
@@ -59,6 +61,19 @@ $(function(){
       Books.bind('reset', this.addAll);
       Books.fetch();
     },
+
+    selectAllBooks: function(el){
+	    var target = $(el.target), rows = this.$('#manage tr:not(#select-info)');
+			if(target.is(':checked'))
+			{
+				rows.css({background:"whiteSmoke"}).find('.select').prop("checked", true);
+			}
+			else
+			{
+				rows.css({background:"white"}).find('.select').prop("checked", false);
+			}
+			this.showSelected();
+		},
 
 		selectBookRow: function(el){
 			var target = $(el.target), row = target.parents("tr"), checkbox = row.find('.select');
@@ -72,7 +87,36 @@ $(function(){
 				row.css({background:"whiteSmoke"});
 				checkbox.prop("checked", true);
 			}
+			this.showSelected();			
 		},		
+		
+		showSelected: function(){
+			var info = $('#select-info'), count = $('#manage .select:checked').length, word = count>1?"books":"book",
+			    html = '<tr id="select-info"><td colspan="6">('+count+') '+word+' selected. <a id="deleteall" href="javascript:void(0);">delete</a></td></tr>';
+			if(Books.length>0)
+			{
+				if(info.length === 0)
+				{
+				  $('#manage tbody').prepend(html);	
+				}
+				else if(count>0)
+				{
+					info.replaceWith($(html));
+				}
+				else
+				{
+					info.remove();
+				}
+			}	
+		},
+		
+		deleteAll: function(){
+			$('#manage tbody').find('input:checked').each(function() {
+				Books.get($(this).data('id')).destroy();
+			});
+			this.$("#manage table tbody").empty();
+			$('#selectall').prop("checked", false);
+		},
 
 		tabs: function(e){
 		  var target = $(e.target);
@@ -86,6 +130,7 @@ $(function(){
 		  else
 		  {	
 			  this.addAll();
+				this.$('#selectall').prop("checked", false);
 		    this.$("#manage").show();		
 		  }
 		},
@@ -120,7 +165,7 @@ $(function(){
 		},		
 
 	  addAll: function(){
-		  this.$("#manage table tbody").empty(); 
+		  this.$("#manage table tbody").empty(); 	
 	    Books.each(this.addBook)
 	  },
 	  

@@ -367,3 +367,13 @@
 		padding: 6px 15px 6px 15px;
 	}
 
+	#select-info {
+		text-align: center;
+		color:#fff;
+		background:#333;
+	}
+	
+	#select-info a {
+		color:#fff;
+		text-decoration:underline;
+	}
